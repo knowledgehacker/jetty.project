@@ -32,10 +32,17 @@ import org.eclipse.jetty.spdy.client.SPDYClient.SessionPromise;
 import org.eclipse.jetty.spdy.generator.Generator;
 import org.eclipse.jetty.spdy.parser.Parser;
 
+import org.eclipse.jetty.util.log.Log;
+import org.eclipse.jetty.util.log.Logger;
+
 public class SPDYClientConnectionFactory
 {
+	private static final Logger LOG = Log.getLogger(SPDYClientConnectionFactory.class);
+
     public Connection newConnection(SocketChannel channel, EndPoint endPoint, Object attachment)
     {
+		LOG.info("[minglin] SPDYClientConnectionFactory.newConnection(...) starts");
+
         SessionPromise sessionPromise = (SessionPromise)attachment;
         SPDYClient client = sessionPromise.client;
         Factory factory = client.factory;
@@ -58,6 +65,7 @@ public class SPDYClientConnectionFactory
         connection.setSession(session);
 
         factory.sessionOpened(session);
+		LOG.info("[minglin] SPDYClientConnectionFactory.newConnection(...) finishes");
 
         return connection;
     }

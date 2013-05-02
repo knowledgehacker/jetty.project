@@ -1,0 +1,60 @@
+
+The npn-boot-xxx.jar specified in jetty.project is obsolete, use a new one.
+a. Find the components need npn-boot-xxx.jar by grep ./ -e "npn.version" -inR
+jetty-spdy/spdy-server, jetty-spdy/spdy-client, jetty-spdy/spdy-http-server, jetty-osgi/test-jetty-osgi 
+b. Change the version of npn-boot-xxx.jar in the corresponding pom.xml
+jetty-spdy/pom.xml:
+    <properties>
+        <!-- changed by minglin -->
+        <!-- <npn.version>1.1.0.v20120525</npn.version> -->
+        <npn.version>1.1.5.v20130313</npn.version>
+        <npn.api.version>1.1.0.v20120525</npn.api.version>
+    </properties>
+jetty-spdy/spdy-client/pom.xml:
+    <dependencies>
+        <dependency>
+            <groupId>org.eclipse.jetty.spdy</groupId>
+            <artifactId>spdy-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty.npn</groupId>
+            <artifactId>npn-api</artifactId>
+            <!-- changed by minglin -->
+            <!-- <version>${npn.version}</version> -->
+            <version>${npn.api.version}</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+jetty-spdy/spdy-server/pom.xml:
+	<dependencies>
+	...
+        <dependency>
+            <groupId>org.eclipse.jetty.npn</groupId>
+            <artifactId>npn-api</artifactId>
+            <!-- changed by minglin -->
+            <!-- <version>${npn.version}</version> -->
+            <version>${npn.api.version}</version>
+            <scope>provided</scope>
+        </dependency>
+	...
+	</dependencies>
+jetty-spdy/spdy-http-server/pom.xml:
+	<dependencies>
+	...
+        <dependency>
+            <groupId>org.eclipse.jetty.npn</groupId>
+            <artifactId>npn-api</artifactId>
+            <!-- changed by minglin -->
+            <!-- <version>${npn.version}</version> -->
+            <version>${npn.api.version}</version>
+            <scope>provided</scope>
+        </dependency>
+	...
+	</dependencies>
+
+
+jetty-osgi/pom.xml:
+    <!-- changed by minglin -->
+    <!-- <npn-version>1.1.0.v20120525</npn-version> -->
+    <npn-version>1.1.5.v20130313</npn-version>

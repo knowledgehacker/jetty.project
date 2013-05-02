@@ -508,6 +508,7 @@ public abstract class SelectorManager extends AbstractLifeCycle implements Dumpa
         {
             key.attach(connect.attachment);
             SocketChannel channel = (SocketChannel)key.channel();
+			LOG.info("[minglin] ManagedSelector.processConnect(...) - channel: " + channel);
             try
             {
                 boolean connected = finishConnect(channel);
@@ -516,6 +517,7 @@ public abstract class SelectorManager extends AbstractLifeCycle implements Dumpa
                     connect.timeout.cancel();
                     key.interestOps(0);
                     EndPoint endpoint = createEndPoint(channel, key);
+					LOG.info("[minglin] ManagedSelector.processConnect(...)- endpoint: " + endpoint);
                     key.attach(endpoint);
                 }
                 else
@@ -554,11 +556,17 @@ public abstract class SelectorManager extends AbstractLifeCycle implements Dumpa
 
         private EndPoint createEndPoint(SocketChannel channel, SelectionKey selectionKey) throws IOException
         {
+			LOG.info("[minglin] SelectorManager.createEndPoint");
+
+			LOG.info("[minglin] ServerConnector.newEndPoint starts");
             EndPoint endPoint = newEndPoint(channel, this, selectionKey);
             endPointOpened(endPoint);
+			LOG.info("[minglin] ServerConnector.newEndPoint finishes");
+			LOG.info("[minglin] ServerConnector.newConnection starts");
             Connection connection = newConnection(channel, endPoint, selectionKey.attachment());
             endPoint.setConnection(connection);
             connectionOpened(connection);
+			LOG.info("[minglin] ServerConnector.newConnection finishes");
             LOG.debug("Created {}", endPoint);
             return endPoint;
         }
@@ -677,10 +685,13 @@ public abstract class SelectorManager extends AbstractLifeCycle implements Dumpa
             @Override
             public void run()
             {
+				LOG.info("[minglin] Accept.run() - registers channel " + _channel + " with 0");
+
                 try
                 {
                     SelectionKey key = _channel.register(_selector, 0, null);
                     EndPoint endpoint = createEndPoint(_channel, key);
+					LOG.info("[minglin] Accept.run() - endpoint: " + endpoint);
                     key.attach(endpoint);
                 }
                 catch (IOException x)
@@ -707,6 +718,8 @@ public abstract class SelectorManager extends AbstractLifeCycle implements Dumpa
             @Override
             public void run()
             {
+				LOG.info("[minglin] Connect.run() - registers channel " + channel + " with OP_CONNECT");
+
                 try
                 {
                     channel.register(_selector, SelectionKey.OP_CONNECT, this);

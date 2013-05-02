@@ -53,6 +53,9 @@ import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import org.eclipse.jetty.util.thread.Scheduler;
 import org.eclipse.jetty.util.thread.TimerScheduler;
 
+import org.eclipse.jetty.util.log.Log;
+import org.eclipse.jetty.util.log.Logger;
+
 public class SPDYClient
 {
     private final SPDYClientConnectionFactory connectionFactory = new SPDYClientConnectionFactory();
@@ -61,6 +64,8 @@ public class SPDYClient
     private volatile SocketAddress bindAddress;
     private volatile long idleTimeout = -1;
     private volatile int initialWindowSize;
+
+	protected static final Logger LOG = Log.getLogger(SPDYClient.class);
 
     protected SPDYClient(short version, Factory factory)
     {
@@ -92,6 +97,7 @@ public class SPDYClient
         if (!factory.isStarted())
             throw new IllegalStateException(Factory.class.getSimpleName() + " is not started");
 
+		LOG.info("[minglin] - SPDYClient.connect(...): calling SocketChannel.open() starts");
         SocketChannel channel = SocketChannel.open();
         if (bindAddress != null)
             channel.bind(bindAddress);
@@ -100,6 +106,7 @@ public class SPDYClient
 
         SessionPromise result = new SessionPromise(channel, this, listener);
 
+		LOG.info("[minglin] - SPDYClient.connect(...): calling SocketChannel.connect(...) starts");
         channel.connect(address);
         factory.selector.connect(channel, result);
 
@@ -287,6 +294,7 @@ public class SPDYClient
             @Override
             protected EndPoint newEndPoint(SocketChannel channel, ManagedSelector selectSet, SelectionKey key) throws IOException
             {
+				LOG.info("[minglin] SPDYClient$Factory$ClientSelectorManager.newEndPoint(...) starts");
                 SessionPromise attachment = (SessionPromise)key.attachment();
 
                 long clientIdleTimeout = attachment.client.getIdleTimeout();
@@ -299,6 +307,7 @@ public class SPDYClient
             @Override
             public Connection newConnection(final SocketChannel channel, EndPoint endPoint, final Object attachment)
             {
+				LOG.info("[minglin] SPDYClient$Factory$ClientSelectorManager.newConnection(...) starts");
                 SessionPromise sessionPromise = (SessionPromise)attachment;
                 final SPDYClient client = sessionPromise.client;
 

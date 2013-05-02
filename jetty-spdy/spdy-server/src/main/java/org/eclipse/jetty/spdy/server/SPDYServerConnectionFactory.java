@@ -98,6 +98,8 @@ public class SPDYServerConnectionFactory extends AbstractConnectionFactory
     @Override
     public Connection newConnection(Connector connector, EndPoint endPoint)
     {
+		LOG.info("[minglin] SPDYServerConnectionFactory.newConnection(...) starts");
+
         CompressionFactory compressionFactory = new StandardCompressionFactory();
         Parser parser = new Parser(compressionFactory.newDecompressor());
         Generator generator = new Generator(connector.getByteBufferPool(), compressionFactory.newCompressor());

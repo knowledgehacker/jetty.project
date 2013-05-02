@@ -278,6 +278,7 @@ public class ServerConnector extends AbstractNetworkConnector
     @Override
     public void accept(int acceptorID) throws IOException
     {
+		LOG.info("[minglin] - ServerConnector.accept(int acceptorID) starts");
         ServerSocketChannel serverChannel = _acceptChannel;
         if (serverChannel != null && serverChannel.isOpen())
         {

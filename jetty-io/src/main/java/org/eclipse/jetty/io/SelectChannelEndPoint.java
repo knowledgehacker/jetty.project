@@ -102,6 +102,7 @@ public class SelectChannelEndPoint extends ChannelEndPoint implements SelectorMa
         assert _selector.isSelectorThread();
         int oldInterestOps = _key.interestOps();
         int readyOps = _key.readyOps();
+		LOG.info("[minglin] SelectChannelEndPoint.onSelected() - readyOPs " + readyOps);
         int newInterestOps = oldInterestOps & ~readyOps;
         setKeyInterests(oldInterestOps, newInterestOps);
         updateLocalInterests(readyOps, false);
