@@ -16,7 +16,7 @@
 //  ========================================================================
 //
 
-package org.eclipse.jetty.spdy.client;
+package org.eclipse.jetty.spdy;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -26,9 +26,6 @@ import org.eclipse.jetty.io.AbstractConnection;
 import org.eclipse.jetty.io.ByteBufferPool;
 import org.eclipse.jetty.io.EndPoint;
 import org.eclipse.jetty.io.RuntimeIOException;
-import org.eclipse.jetty.spdy.Controller;
-import org.eclipse.jetty.spdy.ISession;
-import org.eclipse.jetty.spdy.IdleListener;
 import org.eclipse.jetty.spdy.api.GoAwayInfo;
 import org.eclipse.jetty.spdy.parser.Parser;
 import org.eclipse.jetty.util.Callback;

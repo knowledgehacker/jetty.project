@@ -25,6 +25,7 @@ import org.eclipse.jetty.io.Connection;
 import org.eclipse.jetty.io.EndPoint;
 import org.eclipse.jetty.spdy.CompressionFactory;
 import org.eclipse.jetty.spdy.FlowControlStrategy;
+import org.eclipse.jetty.spdy.SPDYConnection;
 import org.eclipse.jetty.spdy.StandardCompressionFactory;
 import org.eclipse.jetty.spdy.StandardSession;
 import org.eclipse.jetty.spdy.client.SPDYClient.Factory;

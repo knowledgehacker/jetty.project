@@ -16,10 +16,8 @@
 //  ========================================================================
 //
 
-package org.eclipse.jetty.spdy.client;
+package org.eclipse.jetty.spdy;
 
-import org.eclipse.jetty.spdy.FlowControlStrategy;
-import org.eclipse.jetty.spdy.SPDYv3FlowControlStrategy;
 import org.eclipse.jetty.spdy.api.SPDY;
 
 public class FlowControlStrategyFactory
