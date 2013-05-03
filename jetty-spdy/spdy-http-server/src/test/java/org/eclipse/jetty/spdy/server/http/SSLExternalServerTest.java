@@ -59,6 +59,7 @@ public class SSLExternalServerTest extends AbstractHTTPSPDYTest
     @Test
     public void testExternalServer() throws Exception
     {
+		/*
         String host = "encrypted.google.com";
         int port = 443;
         InetSocketAddress address = new InetSocketAddress(host, port);
@@ -99,5 +100,6 @@ public class SSLExternalServerTest extends AbstractHTTPSPDYTest
             }
         });
         Assert.assertTrue(latch.await(5, TimeUnit.SECONDS));
+		*/
     }
 }
