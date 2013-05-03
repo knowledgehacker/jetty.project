@@ -479,10 +479,12 @@ public abstract class SelectorManager extends AbstractLifeCycle implements Dumpa
             {
                 if (attachment instanceof SelectableEndPoint)
                 {
+					LOG.info("[minglin] SelectorManager$ManagedSelector.processKey - calls ((SelectableEndPoint)attachment).onSelected()");
                     ((SelectableEndPoint)attachment).onSelected();
                 }
                 else if (key.isConnectable())
                 {
+					LOG.info("[minglin] SelectorManager$ManagedSelector.processKey - calls processConnect");
                     processConnect(key, (Connect)attachment);
                 }
                 else
@@ -508,16 +510,16 @@ public abstract class SelectorManager extends AbstractLifeCycle implements Dumpa
         {
             key.attach(connect.attachment);
             SocketChannel channel = (SocketChannel)key.channel();
-			LOG.info("[minglin] ManagedSelector.processConnect(...) - channel: " + channel);
             try
             {
                 boolean connected = finishConnect(channel);
+				LOG.info("[minglin] ManagedSelector.processConnect(...) - connected");
                 if (connected)
                 {
                     connect.timeout.cancel();
                     key.interestOps(0);
                     EndPoint endpoint = createEndPoint(channel, key);
-					LOG.info("[minglin] ManagedSelector.processConnect(...)- endpoint: " + endpoint);
+					LOG.info("[minglin] ManagedSelector.processConnect(...)- channel: " + channel + ", endpoint: " + endpoint);
                     key.attach(endpoint);
                 }
                 else
@@ -556,17 +558,19 @@ public abstract class SelectorManager extends AbstractLifeCycle implements Dumpa
 
         private EndPoint createEndPoint(SocketChannel channel, SelectionKey selectionKey) throws IOException
         {
-			LOG.info("[minglin] SelectorManager.createEndPoint");
+			LOG.info("[minglin] SelectorManager.createEndPoint starts");
 
-			LOG.info("[minglin] ServerConnector.newEndPoint starts");
+			LOG.info("[minglin] SelectorManager.createEndPoint - calls newEndPoint(...)");
             EndPoint endPoint = newEndPoint(channel, this, selectionKey);
+			LOG.info("[minglin] SelectorManager.createEndPoint - calls endPointOpened(...)");
             endPointOpened(endPoint);
-			LOG.info("[minglin] ServerConnector.newEndPoint finishes");
-			LOG.info("[minglin] ServerConnector.newConnection starts");
+			LOG.info("[minglin] SelectorManager.createEndPoint - calls newConnection(...)");
             Connection connection = newConnection(channel, endPoint, selectionKey.attachment());
             endPoint.setConnection(connection);
+			LOG.info("[minglin] SelectorManager.createEndPoint - calls connectionOpened(...)");
             connectionOpened(connection);
-			LOG.info("[minglin] ServerConnector.newConnection finishes");
+
+			LOG.info("[minglin] SelectorManager.createEndPoint finishes");
             LOG.debug("Created {}", endPoint);
             return endPoint;
         }

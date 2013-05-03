@@ -189,6 +189,9 @@ public class SPDYServerConnectionFactory extends AbstractConnectionFactory
         public void onOpen()
         {
             super.onOpen();
+		
+			LOG.info("[minglin] SPDYServerConnectionFactory$ServerSPDYConnection.onOpen()");
+
             if (connected.compareAndSet(false, true))
                 getExecutor().execute(this);
         }
@@ -203,6 +206,8 @@ public class SPDYServerConnectionFactory extends AbstractConnectionFactory
         @Override
         public void run()
         {
+			LOG.info("[minglin] SPDYServerConnectionFactory$ServerSPDYConnection.run() - calls listener.onConnect(...)");
+
             // NPE guard to support tests
             if (listener != null)
                 listener.onConnect(getSession());

@@ -65,6 +65,7 @@ public class SPDYClientConnectionFactory
         connection.setSession(session);
 
         factory.sessionOpened(session);
+
 		LOG.info("[minglin] SPDYClientConnectionFactory.newConnection(...) finishes");
 
         return connection;
