@@ -19,7 +19,6 @@
 package org.eclipse.jetty.spdy.parser;
 
 import java.nio.ByteBuffer;
-import java.util.EnumMap;
 
 import org.eclipse.jetty.spdy.CompressionFactory;
 import org.eclipse.jetty.spdy.frames.ControlFrame;
@@ -27,7 +26,7 @@ import org.eclipse.jetty.spdy.frames.ControlFrameType;
 
 public abstract class ControlFrameParser
 {
-    private final EnumMap<ControlFrameType, ControlFrameBodyParser> parsers = new EnumMap<>(ControlFrameType.class);
+	private final ControlFrameBodyParser[] parsers = new ControlFrameBodyParser[ControlFrameType.TYPE_NUM + 1];
     private final ControlFrameBodyParser unknownParser = new UnknownControlFrameBodyParser(this);
     private State state = State.VERSION;
     private int cursor;
@@ -39,16 +38,16 @@ public abstract class ControlFrameParser
 
     public ControlFrameParser(CompressionFactory.Decompressor decompressor)
     {
-        parsers.put(ControlFrameType.SYN_STREAM, new SynStreamBodyParser(decompressor, this));
-        parsers.put(ControlFrameType.SYN_REPLY, new SynReplyBodyParser(decompressor, this));
-        parsers.put(ControlFrameType.RST_STREAM, new RstStreamBodyParser(this));
-        parsers.put(ControlFrameType.SETTINGS, new SettingsBodyParser(this));
-        parsers.put(ControlFrameType.NOOP, new NoOpBodyParser(this));
-        parsers.put(ControlFrameType.PING, new PingBodyParser(this));
-        parsers.put(ControlFrameType.GO_AWAY, new GoAwayBodyParser(this));
-        parsers.put(ControlFrameType.HEADERS, new HeadersBodyParser(decompressor, this));
-        parsers.put(ControlFrameType.WINDOW_UPDATE, new WindowUpdateBodyParser(this));
-        parsers.put(ControlFrameType.CREDENTIAL, new CredentialBodyParser(this));
+        parsers[ControlFrameType.SYN_STREAM] = new SynStreamBodyParser(decompressor, this);
+        parsers[ControlFrameType.SYN_REPLY] = new SynReplyBodyParser(decompressor, this);
+        parsers[ControlFrameType.RST_STREAM] = new RstStreamBodyParser(this);
+        parsers[ControlFrameType.SETTINGS] = new SettingsBodyParser(this);
+        parsers[ControlFrameType.NOOP] = new NoOpBodyParser(this);
+        parsers[ControlFrameType.PING] = new PingBodyParser(this);
+        parsers[ControlFrameType.GO_AWAY] = new GoAwayBodyParser(this);
+        parsers[ControlFrameType.HEADERS] = new HeadersBodyParser(decompressor, this);
+        parsers[ControlFrameType.WINDOW_UPDATE] = new WindowUpdateBodyParser(this);
+        parsers[ControlFrameType.CREDENTIAL] = new CredentialBodyParser(this);
     }
 
     public short getVersion()
@@ -136,13 +135,11 @@ public abstract class ControlFrameParser
                     if (cursor > 0)
                         break;
 
-                    ControlFrameType controlFrameType = ControlFrameType.from(type);
-
                     // SPEC v3, 2.2.1: unrecognized control frames must be ignored
-                    if (controlFrameType == null)
+                    if ((type < 1) || (type > 10))
                         parser = unknownParser;
                     else
-                        parser = parsers.get(controlFrameType);
+                        parser = parsers[type];
 
                     state = State.BODY;
 

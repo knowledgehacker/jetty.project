@@ -23,10 +23,10 @@ public abstract class ControlFrame
     public static final int HEADER_LENGTH = 8;
 
     private final short version;
-    private final ControlFrameType type;
+    private final short type;
     private final byte flags;
 
-    public ControlFrame(short version, ControlFrameType type, byte flags)
+    public ControlFrame(short version, short type, byte flags)
     {
         this.version = version;
         this.type = type;
@@ -38,7 +38,7 @@ public abstract class ControlFrame
         return version;
     }
 
-    public ControlFrameType getType()
+    public short getType()
     {
         return type;
     }

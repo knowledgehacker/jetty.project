@@ -353,52 +353,52 @@ public class StandardSession implements ISession, Parser.Listener, Dumpable
 
             switch (frame.getType())
             {
-                case SYN_STREAM:
+                case ControlFrameType.SYN_STREAM:
                 {
                     onSyn((SynStreamFrame)frame);
                     break;
                 }
-                case SYN_REPLY:
+                case ControlFrameType.SYN_REPLY:
                 {
                     onReply((SynReplyFrame)frame);
                     break;
                 }
-                case RST_STREAM:
+                case ControlFrameType.RST_STREAM:
                 {
                     onRst((RstStreamFrame)frame);
                     break;
                 }
-                case SETTINGS:
+                case ControlFrameType.SETTINGS:
                 {
                     onSettings((SettingsFrame)frame);
                     break;
                 }
-                case NOOP:
+                case ControlFrameType.NOOP:
                 {
                     // Just ignore it
                     break;
                 }
-                case PING:
+                case ControlFrameType.PING:
                 {
                     onPing((PingFrame)frame);
                     break;
                 }
-                case GO_AWAY:
+                case ControlFrameType.GO_AWAY:
                 {
                     onGoAway((GoAwayFrame)frame);
                     break;
                 }
-                case HEADERS:
+                case ControlFrameType.HEADERS:
                 {
                     onHeaders((HeadersFrame)frame);
                     break;
                 }
-                case WINDOW_UPDATE:
+                case ControlFrameType.WINDOW_UPDATE:
                 {
                     onWindowUpdate((WindowUpdateFrame)frame);
                     break;
                 }
-                case CREDENTIAL:
+                case ControlFrameType.CREDENTIAL:
                 {
                     onCredential((CredentialFrame)frame);
                     break;

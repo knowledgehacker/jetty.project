@@ -34,6 +34,7 @@ import org.eclipse.jetty.spdy.api.RstInfo;
 import org.eclipse.jetty.spdy.api.Stream;
 import org.eclipse.jetty.spdy.api.StreamFrameListener;
 import org.eclipse.jetty.spdy.api.StreamStatus;
+import org.eclipse.jetty.spdy.frames.ControlFrameType;
 import org.eclipse.jetty.spdy.frames.ControlFrame;
 import org.eclipse.jetty.spdy.frames.HeadersFrame;
 import org.eclipse.jetty.spdy.frames.SynReplyFrame;
@@ -195,12 +196,12 @@ public class StandardStream implements IStream
     {
         switch (frame.getType())
         {
-            case SYN_STREAM:
+            case ControlFrameType.SYN_STREAM:
             {
                 openState = OpenState.SYN_RECV;
                 break;
             }
-            case SYN_REPLY:
+            case ControlFrameType.SYN_REPLY:
             {
                 openState = OpenState.REPLY_RECV;
                 SynReplyFrame synReply = (SynReplyFrame)frame;
@@ -209,7 +210,7 @@ public class StandardStream implements IStream
                 notifyOnReply(replyInfo);
                 break;
             }
-            case HEADERS:
+            case ControlFrameType.HEADERS:
             {
                 HeadersFrame headers = (HeadersFrame)frame;
                 updateCloseState(headers.isClose(), false);
@@ -217,7 +218,7 @@ public class StandardStream implements IStream
                 notifyOnHeaders(headersInfo);
                 break;
             }
-            case RST_STREAM:
+            case ControlFrameType.RST_STREAM:
             {
                 reset = true;
                 break;

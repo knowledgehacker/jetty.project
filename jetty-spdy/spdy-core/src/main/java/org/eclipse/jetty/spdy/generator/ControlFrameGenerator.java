@@ -42,7 +42,7 @@ public abstract class ControlFrameGenerator
     protected void generateControlFrameHeader(ControlFrame frame, int frameLength, ByteBuffer buffer)
     {
         buffer.putShort((short)(0x8000 + frame.getVersion()));
-        buffer.putShort(frame.getType().getCode());
+        buffer.putShort(frame.getType());
         int flagsAndLength = frame.getFlags();
         flagsAndLength <<= 24;
         flagsAndLength += frameLength;
