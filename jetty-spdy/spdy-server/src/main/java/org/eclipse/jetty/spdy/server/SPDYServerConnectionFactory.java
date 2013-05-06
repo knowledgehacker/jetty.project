@@ -103,11 +103,14 @@ public class SPDYServerConnectionFactory extends AbstractConnectionFactory
         CompressionFactory compressionFactory = new StandardCompressionFactory();
         Parser parser = new Parser(compressionFactory.newDecompressor());
         Generator generator = new Generator(connector.getByteBufferPool(), compressionFactory.newCompressor());
+		LOG.info("[minglin] SPDYServerConnectionFactory.newConnection(...) - parsers and generators created");
 
         ServerSessionFrameListener listener = provideServerSessionFrameListener(connector, endPoint);
         SPDYConnection connection = new ServerSPDYConnection(connector, endPoint, parser, listener, getInputBufferSize());
+		LOG.info("[minglin] SPDYServerConnectionFactory.newConnection(...) - SPDY connection created");
 
         FlowControlStrategy flowControlStrategy = newFlowControlStrategy(version);
+		LOG.info("[minglin] SPDYServerConnectionFactory.newConnection(...) - flow control strategy created");
 
         StandardSession session = new StandardSession(getVersion(), connector.getByteBufferPool(),
                 connector.getExecutor(), connector.getScheduler(), connection, endPoint, connection, 2, listener,
@@ -117,6 +120,7 @@ public class SPDYServerConnectionFactory extends AbstractConnectionFactory
         connection.setSession(session);
 
         sessionOpened(session);
+		LOG.info("[minglin] SPDYServerConnectionFactory.newConnection(...) - Session created");
 
         return configure(connection, connector, endPoint);
     }
