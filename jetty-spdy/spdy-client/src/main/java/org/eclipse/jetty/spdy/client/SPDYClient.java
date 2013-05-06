@@ -302,6 +302,8 @@ public class SPDYClient
                 if (clientIdleTimeout < 0)
                     clientIdleTimeout = idleTimeout;
 
+				LOG.info("[minglin] SPDYClient$Factory$ClientSelectorManager.newEndPoint(...) - clientIdleTimeout: " + clientIdleTimeout);
+
                 return new SelectChannelEndPoint(channel, selectSet, key, getScheduler(), clientIdleTimeout);
             }
 

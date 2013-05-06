@@ -33,17 +33,17 @@ public abstract class ControlFrame
         this.flags = flags;
     }
 
-    public short getVersion()
+    public final short getVersion()
     {
         return version;
     }
 
-    public short getType()
+    public final short getType()
     {
         return type;
     }
 
-    public byte getFlags()
+    public final byte getFlags()
     {
         return flags;
     }

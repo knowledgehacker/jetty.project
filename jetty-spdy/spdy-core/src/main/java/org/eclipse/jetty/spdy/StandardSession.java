@@ -177,12 +177,14 @@ public class StandardSession implements ISession, Parser.Listener, Dumpable
         synchronized (this)
         {
             int streamId = streamIds.getAndAdd(2);
+			LOG.info("[minglin] StandardSession.syn(...): " + streamId + " starts");
             // TODO: for SPDYv3 we need to support the "slot" argument
             SynStreamFrame synStream = new SynStreamFrame(version, synInfo.getFlags(), streamId, associatedStreamId, synInfo.getPriority(), (short)0, synInfo.getHeaders());
             IStream stream = createStream(synStream, listener, true, promise);
             generateAndEnqueueControlFrame(stream, synStream, synInfo.getTimeout(), synInfo.getUnit(), stream);
         }
         flush();
+		LOG.info("[minglin] StandardSession.syn(...) finishes");
     }
 
     @Override
@@ -864,6 +866,7 @@ public class StandardSession implements ISession, Parser.Listener, Dumpable
     @Override
     public void control(IStream stream, ControlFrame frame, long timeout, TimeUnit unit, Callback callback)
     {
+		LOG.info("[minglin] StandardSession.control(...) - stream: " + stream + ", frame: " + frame);
         generateAndEnqueueControlFrame(stream, frame, timeout, unit, callback);
         flush();
     }
@@ -927,6 +930,11 @@ public class StandardSession implements ISession, Parser.Listener, Dumpable
         threadPool.execute(task);
     }
 
+	/*
+     * It seems the implementation of flush() here is a bad one, by minglin
+	 * Remove the first FrameBytes of each stream from the queue, and write the last FrameBytes to the associated SocketChannel.
+	 * What does this behaviour mean?
+     */
     @Override
     public void flush()
     {
@@ -943,6 +951,7 @@ public class StandardSession implements ISession, Parser.Listener, Dumpable
                 frameBytes = queue.get(i);
 
                 IStream stream = frameBytes.getStream();
+				LOG.info("[minglin] StandardSession.flush() - stream: " + stream);
                 if (stream != null && stalledStreams != null && stalledStreams.contains(stream))
                     continue;
 

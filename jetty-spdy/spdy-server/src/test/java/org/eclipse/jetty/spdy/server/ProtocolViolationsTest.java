@@ -113,7 +113,7 @@ public class ProtocolViolationsTest extends AbstractTest
         readBuffer.clear();
         channel.read(readBuffer);
         readBuffer.flip();
-        Assert.assertEquals(ControlFrameType.RST_STREAM.getCode(), readBuffer.getShort(2));
+        Assert.assertEquals(ControlFrameType.RST_STREAM, readBuffer.getShort(2));
         Assert.assertEquals(streamId, readBuffer.getInt(8));
 
         session.goAway(new GoAwayInfo(5, TimeUnit.SECONDS));
