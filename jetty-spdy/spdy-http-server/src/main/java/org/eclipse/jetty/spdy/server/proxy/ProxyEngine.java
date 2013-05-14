@@ -41,6 +41,7 @@ import org.eclipse.jetty.util.Fields;
 public abstract class ProxyEngine
 {
     private static final Set<String> HOP_HEADERS = new HashSet<>();
+    private static final Set<String> RESPONSE_HOP_HEADERS = new HashSet<>();
     static
     {
         HOP_HEADERS.add("proxy-connection");
@@ -52,6 +53,16 @@ public abstract class ProxyEngine
         HOP_HEADERS.add("proxy-authorization");
         HOP_HEADERS.add("proxy-authenticate");
         HOP_HEADERS.add("upgrade");
+
+		RESPONSE_HOP_HEADERS.add("Proxy-Connection");
+        RESPONSE_HOP_HEADERS.add("Connection");
+        RESPONSE_HOP_HEADERS.add("Keep-Alive");
+        RESPONSE_HOP_HEADERS.add("Transfer-Encoding");
+        RESPONSE_HOP_HEADERS.add("TE");
+        RESPONSE_HOP_HEADERS.add("Trailer");
+        RESPONSE_HOP_HEADERS.add("Proxy-Authorization");
+        RESPONSE_HOP_HEADERS.add("Proxy-Authenticate");
+        RESPONSE_HOP_HEADERS.add("Upgrade");
     }
 
     private final String name;
@@ -88,6 +99,12 @@ public abstract class ProxyEngine
     protected void removeHopHeaders(Fields headers)
     {
         for (String hopHeader : HOP_HEADERS)
+            headers.remove(hopHeader);
+    }
+
+    protected void removeResponseHopHeaders(Fields headers)
+    {
+        for (String hopHeader : RESPONSE_HOP_HEADERS)
             headers.remove(hopHeader);
     }
 

@@ -140,6 +140,17 @@ public class HTTPProxyEngine extends ProxyEngine
             {
                 LOG.debug("onHeaders called with response: {}. Sending replyInfo to client.", response);
                 Fields responseHeaders = createResponseHeaders(clientStream, response);
+				removeResponseHopHeaders(responseHeaders);
+				/*
+				for(Fields.Field responseHeader: responseHeaders)
+					LOG.warn(responseHeader.name() + ": " + responseHeader.value());
+				*/
+
+				short version = clientStream.getSession().getVersion();
+       			String versionHeader = HTTPSPDYHeader.VERSION.name(version);
+				if(responseHeaders.get(versionHeader) == null)
+					responseHeaders.put(versionHeader, "HTTP/1.1");
+
                 ReplyInfo replyInfo = new ReplyInfo(responseHeaders, false);
                 clientStream.reply(replyInfo, new Callback.Adapter()
                 {
